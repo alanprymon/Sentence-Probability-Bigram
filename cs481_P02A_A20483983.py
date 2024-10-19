@@ -1,5 +1,6 @@
 import nltk
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator
 
 nltk.download('brown')
 nltk.download('reuters')
@@ -20,5 +21,30 @@ if __name__ == '__main__':
     frequenciesAndWords.reverse()
     labels, frequencies = map(list, zip(*frequenciesAndWords))
     for index in range(10):
-        print(str(index) + ' ' + labels[index])
+        print(str(index + 1) + ' ' + labels[index])
+
+    labels2 = labels[:1000]
+    frequencies2 = frequencies[:1000]
+    fig, ax = plt.subplots()
+    xs = range(len(labels))
+    labels2 = range(len(labels))
+
+    def format_fn(tick_val, tick_pos):
+        if int(tick_val) in xs:
+            return labels2[int(tick_val)]
+        else:
+            return ''
+
+    ax.xaxis.set_major_formatter(format_fn)
+    ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+    ax.plot(xs, frequencies)
+    ax.set_title('Token frequency counts in corpus ranked')
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    plt.xlabel('log(Rank)')
+    plt.ylabel('log(Frequency count)')
+    plt.show()
+
+
+
     print('debug')
