@@ -27,37 +27,19 @@ def frequencyDistribution(corpusIn) -> (list, list):
     #saving the labels and frequencies in seperate list in order
     labels, frequencies = map(list, zip(*frequenciesAndWords))
     #printing the top 10 most common 'words' - part A2
+    print("top 10 words:")
     for index in range(10):
         print(str(index + 1) + ' ' + labels[index])
     return labels, frequencies
 
-def plotFreqRank() -> None:
-
-    return
-
-if __name__ == '__main__':
-    corpusBrown = nltk.corpus.brown
-    corpusReuters = nltk.corpus.reuters
-    '''stopWordsCorpus = nltk.corpus.stopwords.words('english')
-    wordsBrown = corpusBrown.words()
-    wordsBrown = [w for w in wordsBrown if w.lower() not in stopWordsCorpus]
-    frequencyDistribution = nltk.FreqDist(word.lower() for word in wordsBrown)
-    frequenciesAndWords = dict()
-    for word in wordsBrown:
-        frequenciesAndWords[word] = frequencyDistribution[word]
-    frequenciesAndWords = list(frequenciesAndWords.items())
-    frequenciesAndWords.sort(key=lambda a: a[1])
-    frequenciesAndWords.reverse()
-    labels, frequencies = map(list, zip(*frequenciesAndWords))
-    for index in range(10):
-        print(str(index + 1) + ' ' + labels[index])'''
-    labels, frequencies = frequencyDistribution(corpusBrown)
-
+def plotFreqRank(labels: list, frequencies: list, whichcorpus: str) -> None:
+    #function completes part A3
+    #setup of size of graph and what values to look/plot
     labels2 = labels[:1000]
     frequencies2 = frequencies[:1000]
     fig, ax = plt.subplots()
-    xs = range(len(labels))
-    labels2 = range(len(labels))
+    xs = range(len(labels2))
+    labels2 = range(len(labels2))
 
     def format_fn(tick_val, tick_pos):
         if int(tick_val) in xs:
@@ -67,13 +49,24 @@ if __name__ == '__main__':
 
     ax.xaxis.set_major_formatter(format_fn)
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
-    ax.plot(xs, frequencies)
-    ax.set_title('Token frequency counts in corpus ranked')
+    #put values into graph
+    ax.plot(xs, frequencies2)
+    #setup of title, axis titles, and scale to log
+    ax.set_title('Token frequency counts in ' + whichcorpus + 'corpus ranked [first 1000 tokens]')
     ax.set_xscale('log')
     ax.set_yscale('log')
     plt.xlabel('log(Rank)')
     plt.ylabel('log(Frequency count)')
     plt.show()
+    return
+
+if __name__ == '__main__':
+    corpusBrown = nltk.corpus.brown
+    corpusReuters = nltk.corpus.reuters
+    print(10*"-"+"For the Brown corpus"+10*"-")
+    labels, frequencies = frequencyDistribution(corpusBrown)
+    plotFreqRank(labels, frequencies, "Brown")
+    print(10 * "-" + "For the reuters corpus" + 10 * "-")
 
     totalWordsBrown = 0
     for i in frequencies:
