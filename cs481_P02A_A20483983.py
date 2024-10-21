@@ -30,6 +30,7 @@ def frequencyDistribution(corpusIn) -> (list, list):
     print("top 10 words:")
     for index in range(10):
         print(str(index + 1) + ' ' + labels[index])
+    print(6*'-')
     return labels, frequencies
 
 def plotFreqRank(labels: list, frequencies: list, whichcorpus: str) -> None:
@@ -52,7 +53,7 @@ def plotFreqRank(labels: list, frequencies: list, whichcorpus: str) -> None:
     #put values into graph
     ax.plot(xs, frequencies2)
     #setup of title, axis titles, and scale to log
-    ax.set_title('Token frequency counts in ' + whichcorpus + 'corpus ranked [first 1000 tokens]')
+    ax.set_title('Token frequency counts in ' + whichcorpus + ' corpus ranked [first 1000 tokens]')
     ax.set_xscale('log')
     ax.set_yscale('log')
     plt.xlabel('log(Rank)')
@@ -60,23 +61,34 @@ def plotFreqRank(labels: list, frequencies: list, whichcorpus: str) -> None:
     plt.show()
     return
 
+def unigramExample(labels: list, frequencies: list, testword: str) -> None:
+    #getting total number of words in corpus by adding all frequencies up
+    totalWords = 0
+    for i in frequencies:
+        totalWords += i
+    #adding amount of the word in the corpus by finding it then using that index getting the frequency
+    wordAmount = 0
+    for i in range(len(labels)):
+        if labels[i].lower() == testword:
+            wordAmount += frequencies[i]
+    #printing everything out
+    print("total count of words in corpus: " + str(totalWords))
+    print("total count of \"" + testword + "\" in corpus: " + str(wordAmount))
+    print("unigram occurrence probability for \"" + testword + "\": " + str(wordAmount / totalWords))
+    return
+
 if __name__ == '__main__':
     corpusBrown = nltk.corpus.brown
     corpusReuters = nltk.corpus.reuters
+    #doing everything for the brown corpus
     print(10*"-"+"For the Brown corpus"+10*"-")
-    labels, frequencies = frequencyDistribution(corpusBrown)
-    plotFreqRank(labels, frequencies, "Brown")
+    labels1, frequencies1 = frequencyDistribution(corpusBrown)
+    plotFreqRank(labels1, frequencies1, "Brown")
+    unigramExample(labels1, frequencies1, "remunerate")
+    unigramExample(labels1, frequencies1, "work")
+    #doing everything for the reuters corpus
     print(10 * "-" + "For the reuters corpus" + 10 * "-")
-
-    totalWordsBrown = 0
-    for i in frequencies:
-        totalWordsBrown += i
-    techAmount = 0
-    for i in range(len(labels)):
-        if labels[i] == 'work':
-            techAmount = frequencies[i]
-            break
-    print(techAmount/totalWordsBrown)
-
-
-    print('debug')
+    labels2, frequencies2 = frequencyDistribution(corpusReuters)
+    plotFreqRank(labels2, frequencies2, "Reuters")
+    unigramExample(labels2, frequencies2, "remunerate")
+    unigramExample(labels2, frequencies2, "work")
