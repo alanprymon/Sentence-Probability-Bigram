@@ -29,7 +29,7 @@ def frequencyDistribution(corpusIn) -> (list, list):
     #printing the top 10 most common 'words' - part A2
     print("top 10 words:")
     for index in range(10):
-        print(str(index + 1) + ' ' + labels[index])
+        print(str(index + 1) + ': ' + labels[index])
     print(6*'-')
     return labels, frequencies
 
