@@ -52,11 +52,11 @@ if __name__ == '__main__':
     sentence = nltk.word_tokenize(sentence) #Using this instead of split to handle punctuation, etc easier
     sentence = [grams for grams in nltk.bigrams(sentence)]
     sentenceProb = []
-    print("Each bigram probability:\n" + "(<$>, " + sentence[0][0] + ") -> P(" + sentence[0][0] + ", <$>) = 0.25")
+    print("Each bigram probability:\n" + "(<$>, " + sentence[0][0] + ") -> P(" + sentence[0][0] + " | <$>) = 0.25")
     for x in sentence:
         sentenceProb.append(bigramProb(x, nltk.corpus.brown))
-        print("(" + x[0] + ", " + x[1] + ") -> P(" + x[1] + ", " + x[0] + ") = " + str(sentenceProb[-1]))
-    print("(" + sentence[len(sentence)-1][1] + ", <$/>) -> P(<$/>, " + sentence[len(sentence)-1][1] + ") = 0.25")
+        print("(" + x[0] + ", " + x[1] + ") -> P(" + x[1] + " | " + x[0] + ") = " + str(sentenceProb[-1]))
+    print("(" + sentence[len(sentence)-1][1] + ", <$/>) -> P(<$/> | " + sentence[len(sentence)-1][1] + ") = 0.25")
     finalProbability = 0.25 * 0.25
     for x in sentenceProb:
         finalProbability = finalProbability * x
